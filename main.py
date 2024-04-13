@@ -1,19 +1,14 @@
 # This example requires the 'message_content' intent.
 
+import os
 import discord
+from discord.ext import commands
+from settings import *
 
+bot = commands.Bot(command_prefix='s!', intents=discord.Intents.default())
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print(f'Logged on as {self.user}!')
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py') and filename != '__init__.py':
+        bot.load_extension(f'cogs.{filename[:-3]}')
 
-    async def on_message(self, message):
-        print(f'Message from {message.author}: {message.content}')
-
-
-intents = discord.Intents.default()
-intents.message_content = True
-
-TOKEN = 'token here'
-client = MyClient(intents=intents)
-client.run(TOKEN)
+bot.run(BOT_TOKEN)
