@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from utils import check_admin, check_mod
+from utils import check_admin, check_mod, notify_user
 
 
 class Admin(commands.Cog):
@@ -32,6 +32,7 @@ class Admin(commands.Cog):
             raise commands.BadArgument()
         else:
             await discord.Guild.ban(ctx.guild, user, reason=reason, **kwargs)
+            await notify_user(user, f'**You have been banned on this server**: {ctx.guild.name} \n **reason**: {reason}')
 
     @commands.command()
     @commands.guild_only()
@@ -44,6 +45,7 @@ class Admin(commands.Cog):
             raise commands.MemberNotFound(user.name)
         else:
             await discord.Guild.unban(ctx.guild, user, reason=reason)
+            await notify_user(user, f'**You have been unbanned on this server**: {ctx.guild.name}')
 
     @commands.command()
     @commands.guild_only()
@@ -54,6 +56,7 @@ class Admin(commands.Cog):
             raise commands.BadArgument()
         else:
             await discord.Guild.kick(ctx.guild, user, reason=reason)
+            await notify_user(user, f'**You have been kicked from this server**: {ctx.guild.name} \n **reason**: {reason}')
 
 
 async def setup(bot):
