@@ -70,7 +70,10 @@ class Voice(commands.Cog):
         self.execute_tts(string)
 
         print(self.active_voice, os.path.join(DATA_DIR, "tts.mp3"), os.path.join(ROOT_DIR, "ffmpeg.exe"))
-        self.active_voice.play(discord.FFmpegPCMAudio(os.path.join(DATA_DIR, "tts.mp3"), **self.ffmpeg_options)) #executable=os.path.join(ROOT_DIR, "ffmpeg.exe")))
+        print(f'now playing {os.path.join(DATA_DIR, "tts.mp3")}')
+        self.active_voice.play(discord.FFmpegPCMAudio(os.path.join(DATA_DIR, "tts.mp3")))
+
+        # self.active_voice.play(discord.FFmpegPCMAudio(os.path.join(DATA_DIR, "tts.mp3"), **self.ffmpeg_options)) #executable=os.path.join(ROOT_DIR, "ffmpeg.exe")))
         # while self.active_voice.is_playing():
             # await asyncio.sleep(1)
 
@@ -81,6 +84,18 @@ class Voice(commands.Cog):
         # player = discord.FFmpegPCMAudio(song, **ffmpeg_options)
         #
         # self.active_voice.play()
+
+    @commands.command()
+    @commands.guild_only()
+    async def tts(self, ctx, *, message: str):
+        if self.active_voice is None:
+            if not await self.join(ctx):
+                return
+        message = f'{ctx.message.author} говорит: {message}'
+        self.execute_tts(message)
+
+        print(f'now playing TTS by {ctx.message.author}')
+        self.active_voice.play(discord.FFmpegPCMAudio(os.path.join(DATA_DIR, "tts.mp3")))
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member: discord.Member, before, after):
