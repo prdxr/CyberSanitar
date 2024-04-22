@@ -7,7 +7,7 @@ import pyttsx3
 
 from discord.ext import commands
 
-from settings import DATA_DIR, ROOT_DIR
+from settings import DATA_DIR, ROOT_DIR, CREATE_VOICE_ID, VOICE_CAT_ID
 
 
 class Voice(commands.Cog):
@@ -82,6 +82,32 @@ class Voice(commands.Cog):
         #
         # self.active_voice.play()
 
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member: discord.Member, before, after):
+        if member.bot:
+            return
+
+        await self.purge_garbage_pvc(member.guild)
+
+        if after.channel is None:
+            print(f'member {member} has left. Stopping create PVC')
+            return
+
+        if after.channel.id == CREATE_VOICE_ID:
+            print(f'user {member.name} connected to {after.channel.name}')
+            voice_category = member.guild.get_channel(VOICE_CAT_ID)
+            pvc_name = f'「⌛」 канал {member.name}'
+            pvc = await member.guild.create_voice_channel(pvc_name, category=voice_category)
+            await member.move_to(pvc)
+
+    async def purge_garbage_pvc(self, guild: discord.Guild):
+        channels = guild.voice_channels
+
+        for channel in channels:
+            if channel.name.startswith('「⌛」') and len(channel.members) == 0:
+                print(f'deleting channel {channel.name}')
+                await channel.delete()
+
     def change_lang(self, lang):
         if lang == 'ru':
             print('setting to ru')
@@ -100,6 +126,7 @@ class Voice(commands.Cog):
         print(f'TEXT: {text}, FILENAME: {filename}')
         self.engine.save_to_file(text, DATA_DIR + f'/{filename}.mp3')
         self.engine.runAndWait()
+
 
 
 async def setup(bot):
