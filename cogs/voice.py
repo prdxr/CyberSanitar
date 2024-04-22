@@ -88,6 +88,26 @@ class Voice(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    async def pause(self, ctx):
+        if not self.active_voice.is_playing():
+            await ctx.send('Музыки и так нет.')
+            return
+
+        self.active_voice.pause()
+        await ctx.send('Поставил на паузу.')
+
+    @commands.command()
+    @commands.guild_only()
+    async def resume(self, ctx):
+        if self.active_voice.is_playing():
+            await ctx.send('Музыка уже идёт.')
+            return
+        if self.active_voice.is_paused():
+            self.active_voice.resume()
+        await ctx.send('Снял с паузы.')
+
+    @commands.command()
+    @commands.guild_only()
     async def tts(self, ctx, *, message: str):
         if self.active_voice is None:
             if not await self.join(ctx):
