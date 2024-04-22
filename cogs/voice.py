@@ -104,7 +104,15 @@ class Voice(commands.Cog):
             return
         if self.active_voice.is_paused():
             self.active_voice.resume()
-        await ctx.send('Снял с паузы.')
+            await ctx.send('Снял с паузы.')
+
+    @commands.command()
+    @commands.guild_only()
+    async def stop(self, ctx):
+        if not self.active_voice.is_playing():
+            await ctx.send('Музыки и так нет.')
+            return
+        self.active_voice.stop()
 
     @commands.command()
     @commands.guild_only()
