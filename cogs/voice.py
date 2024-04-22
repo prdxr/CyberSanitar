@@ -17,6 +17,7 @@ class Voice(commands.Cog):
     ffmpeg_options = None
     engine = None
     voices = None
+    current_lang = None
 
     def __init__(self, bot):
         self.bot = bot
@@ -120,11 +121,21 @@ class Voice(commands.Cog):
         if self.active_voice is None:
             if not await self.join(ctx):
                 return
-        message = f'{ctx.message.author} говорит: {message}'
+        says_word = 'говорит' if self.current_lang == 'ru' else 'says'
+        message = f'{ctx.message.author} {says_word}: {message}'
         self.execute_tts(message)
 
         print(f'now playing TTS by {ctx.message.author}')
         self.active_voice.play(discord.FFmpegPCMAudio(os.path.join(DATA_DIR, "tts.mp3")))
+
+    @commands.command()
+    @commands.guild_only()
+    async def lang(self, ctx, language: str):
+        language = language.lower()
+        if language == 'ru' or language == 'en':
+            self.change_lang(language)
+        else:
+            raise ValueError('only RU / EN allowed')
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member: discord.Member, before, after):
@@ -155,11 +166,13 @@ class Voice(commands.Cog):
     def change_lang(self, lang):
         if lang == 'ru':
             print('setting to ru')
+            self.current_lang = 'ru'
             for voice in self.voices:
                 if voice.name == 'Artemiy':
                     self.engine.setProperty('voice', voice.id)
         elif lang == 'en':
             print('setting to en')
+            self.current_lang = 'en'
             for voice in self.voices:
                 if voice.name == 'Alan':
                     self.engine.setProperty('voice', voice.id)
