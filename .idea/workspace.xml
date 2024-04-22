@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2fea132-576e-4327-b3a4-fc8bda4cac9b" name="Changes" comment="feat: add on_voice_state_update listener, add private voice channel (PVC) functionality, add auto-create PVC for user on join to specific voice channel, add auto-purge abandoned PVCs">
+    <list default="true" id="f2fea132-576e-4327-b3a4-fc8bda4cac9b" name="Changes" comment="feat: add Voice/tts function, add tts support">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/voice.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/voice.py" afterDir="false" />
     </list>
@@ -118,7 +118,7 @@
       <workItem from="1712422390228" duration="9568000" />
       <workItem from="1713008293788" duration="13345000" />
       <workItem from="1713376952431" duration="19357000" />
-      <workItem from="1713797413670" duration="10847000" />
+      <workItem from="1713797413670" duration="17494000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -200,7 +200,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713807327295</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="feat: add Voice/tts function, add tts support">
+      <option name="closed" value="true" />
+      <created>1713812849727</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1713812849727</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,11 +248,12 @@
     <MESSAGE value="feat: add cog Cogs/voice for bot voice interactions; add voice/join and voice/leave commands" />
     <MESSAGE value="debug: add Voice/play command - not implemented yet, add tts engine" />
     <MESSAGE value="feat: add on_voice_state_update listener, add private voice channel (PVC) functionality, add auto-create PVC for user on join to specific voice channel, add auto-purge abandoned PVCs" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add on_voice_state_update listener, add private voice channel (PVC) functionality, add auto-create PVC for user on join to specific voice channel, add auto-purge abandoned PVCs" />
+    <MESSAGE value="feat: add Voice/tts function, add tts support" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add Voice/tts function, add tts support" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CyberSanitar$main.coverage" NAME="main Coverage Results" MODIFIED="1713011383118" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CyberSanitar$run_main.coverage" NAME="run main Coverage Results" MODIFIED="1713809011403" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/CyberSanitar$run_main.coverage" NAME="run main Coverage Results" MODIFIED="1713824227484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/CyberSanitar$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1713011184044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/settings" />
     <SUITE FILE_PATH="coverage/CyberSanitar$settings.coverage" NAME="settings Coverage Results" MODIFIED="1713012643195" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>

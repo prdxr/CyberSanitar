@@ -2,6 +2,7 @@ import asyncio
 import os.path
 
 import youtube_dl
+import yt_dlp
 import discord
 import pyttsx3
 
@@ -19,10 +20,12 @@ class Voice(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.ytdl = youtube_dl.YoutubeDL({'format': 'bestaudio/best'})
         self.ffmpeg_options = {'options': '-vn'}
 
         self.engine = pyttsx3.init()
+
+        yt_dl_options = {"format": "bestaudio/best"}
+        self.ytdl = yt_dlp.YoutubeDL(yt_dl_options)
 
         self.voices = self.engine.getProperty('voices')
         for voice in self.voices:
@@ -61,29 +64,27 @@ class Voice(commands.Cog):
     @commands.command()
     @commands.guild_only()
     async def play(self, ctx, *, url):
-        ### DEBUG
-        print(self.active_voice)
         if self.active_voice is None:
             if not await self.join(ctx):
                 return
-        string = 'Привет мир! Меня зовут артемий. Я буду голосом для киберсанитара'
-        self.execute_tts(string)
 
-        print(self.active_voice, os.path.join(DATA_DIR, "tts.mp3"), os.path.join(ROOT_DIR, "ffmpeg.exe"))
-        print(f'now playing {os.path.join(DATA_DIR, "tts.mp3")}')
-        self.active_voice.play(discord.FFmpegPCMAudio(os.path.join(DATA_DIR, "tts.mp3")))
+        if self.active_voice.is_playing():
+            await ctx.send('Я уже играю песню. Очереди пока нет =)')
+            return
 
-        # self.active_voice.play(discord.FFmpegPCMAudio(os.path.join(DATA_DIR, "tts.mp3"), **self.ffmpeg_options)) #executable=os.path.join(ROOT_DIR, "ffmpeg.exe")))
-        # while self.active_voice.is_playing():
-            # await asyncio.sleep(1)
+        try:
+            ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+                              'options': '-vn -filter:a "volume=0.25"'}
 
-        # loop = asyncio.get_event_loop()
-        # data = await loop.run_in_executor(None, lambda: self.ytdl.extract_info(url, download=False))
-        #
-        # song = data['url']
-        # player = discord.FFmpegPCMAudio(song, **ffmpeg_options)
-        #
-        # self.active_voice.play()
+            loop = asyncio.get_event_loop()
+            data = await loop.run_in_executor(None, lambda: self.ytdl.extract_info(url, download=False))
+
+            song = data['url']
+            player = discord.FFmpegOpusAudio(song, **ffmpeg_options)
+
+            self.active_voice.play(player)
+        except Exception as e:
+            print(e)
 
     @commands.command()
     @commands.guild_only()
@@ -141,7 +142,6 @@ class Voice(commands.Cog):
         print(f'TEXT: {text}, FILENAME: {filename}')
         self.engine.save_to_file(text, DATA_DIR + f'/{filename}.mp3')
         self.engine.runAndWait()
-
 
 
 async def setup(bot):
