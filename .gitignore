@@ -1,0 +1,5 @@
+# Ignore jetbrains IDE folder
+.idea
+
+# Ignore .env file with secrets
+.env
